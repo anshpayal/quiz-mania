@@ -27,7 +27,7 @@ const CategorySelection = ({ categories, onSelectCategory }) => {
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <header className="px-12 py-4 border-b border-[#D9D9D9]">
+      <header className="px-4 md:px-12 py-4 border-b border-[#D9D9D9]">
         <h1 className="text-2xl font-bold text-[#B92B5D]">QuizMania</h1>
       </header>
 

@@ -50,7 +50,7 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <header className="border-b border-[#D9D9D9] px-12 py-4 flex justify-between items-center">
+      <header className="border-b border-[#D9D9D9] px-4 md:px-12 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#B92B5D]">QuizMania</h1>
         <div className="flex items-center gap-4">
           <span className="text-gray-600">Welcome, {userName}</span>
