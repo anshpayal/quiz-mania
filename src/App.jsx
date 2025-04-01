@@ -1,35 +1,67 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import { quizData } from "./data/quizData";
+import CategorySelection from "./components/CategorySelection";
+import Quiz from "./components/Quiz";
+import Result from "./components/Result";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+  const [score, setScore] = useState(0);
+  const [userName, setUserName] = useState("");
+
+  const handleCategorySelect = (category, name) => {
+    setSelectedCategory(category);
+    setUserName(name);
+    setShowResults(false);
+    setScore(0);
+  };
+
+  const handleQuizComplete = (finalScore) => {
+    setScore(finalScore);
+    setShowResults(true);
+  };
+
+  const handleRestart = () => {
+    setSelectedCategory(null);
+    setShowResults(false);
+    setScore(0);
+  };
+
+  const handleExitQuiz = () => {
+    setSelectedCategory(null);
+    setShowResults(false);
+    setScore(0);
+  };
+
+  if (showResults && selectedCategory) {
+    return (
+      <Result
+        score={score}
+        totalQuestions={selectedCategory.questions.length}
+        onRestart={handleRestart}
+        userName={userName}
+      />
+    );
+  }
+
+  if (selectedCategory) {
+    return (
+      <Quiz
+        category={selectedCategory}
+        onComplete={handleQuizComplete}
+        onExit={handleExitQuiz}
+        userName={userName}
+      />
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <CategorySelection
+      categories={quizData.categories}
+      onSelectCategory={handleCategorySelect}
+    />
+  );
 }
 
-export default App
+export default App;
