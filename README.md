@@ -1,5 +1,5 @@
 ## Quiz Mania
-A React-based quiz application that allows users to test their knowledge across multiple categories.
+A React-based quiz application that allows users to test their knowledge across multiple categories. [Live Link](https://quiz-mania-sage.vercel.app/)
 
 ## Problem Statement
 Create a Quiz Application where users can select a category, answer multiple-choice questions with a timer, and receive a final score based on their correct answers. The code should be clean, maintainable, and follow best practices.
