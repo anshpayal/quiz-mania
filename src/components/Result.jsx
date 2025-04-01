@@ -1,16 +1,22 @@
 import React from "react";
 import { Trophy } from "lucide-react";
+import Header from "./Header";
 
-const Result = ({ score, totalQuestions, onRestart, userName }) => {
+const Result = ({
+  score,
+  totalQuestions,
+  onRestart,
+  userName,
+  skippedQuestions = 0,
+}) => {
   const percentage = Math.round((score / totalQuestions) * 100);
   const isHighScore = percentage > 70;
+  const incorrectAnswers = totalQuestions - score;
+  const actuallyWrong = incorrectAnswers - skippedQuestions;
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <header className="px-4 md:px-12 py-4 border-b border-[#D9D9D9] flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#B92B5D]">QuizMania</h1>
-        <span className="text-gray-600">Welcome, {userName}</span>
-      </header>
+      <Header userName={userName} onExit={null} />
 
       <main className="flex-1 flex items-center justify-center p-8">
         <div className="max-w-md w-full text-center">
@@ -59,9 +65,15 @@ const Result = ({ score, totalQuestions, onRestart, userName }) => {
               </div>
               <div>
                 <div className="text-red-500 font-bold text-xl">
-                  {totalQuestions - score}
+                  {actuallyWrong}
                 </div>
                 <div className="text-sm text-gray-600">Incorrect</div>
+              </div>
+              <div>
+                <div className="text-yellow-500 font-bold text-xl">
+                  {skippedQuestions}
+                </div>
+                <div className="text-sm text-gray-600">Skipped</div>
               </div>
             </div>
           </div>

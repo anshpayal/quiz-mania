@@ -1,23 +1,9 @@
 import React, { useState } from "react";
+import Header from "./Header";
 
 const CategorySelection = ({ categories, onSelectCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userName, setUserName] = useState("");
-
-  // const getCategoryIcon = (id) => {
-  //   switch (id) {
-  //     case "js_basics":
-  //       return <Code className="w-12 h-12 text-purple-500" />;
-  //     case "react_basics":
-  //       return <Brain className="w-12 h-12 text-purple-500" />;
-  //     case "angular_basics":
-  //       return <Layers className="w-12 h-12 text-purple-500" />;
-  //     case "flutter_basics":
-  //       return <Smartphone className="w-12 h-12 text-purple-500" />;
-  //     default:
-  //       return <Code className="w-12 h-12 text-purple-500" />;
-  //   }
-  // };
 
   const handleStartQuiz = () => {
     if (selectedCategory && userName.trim()) {
@@ -27,9 +13,7 @@ const CategorySelection = ({ categories, onSelectCategory }) => {
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <header className="px-4 md:px-12 py-4 border-b border-[#D9D9D9]">
-        <h1 className="text-2xl font-bold text-[#B92B5D]">QuizMania</h1>
-      </header>
+      <Header userName="" onExit={null} />
 
       <main className="flex-1 p-8 max-w-3xl mx-auto w-full">
         <div className="text-center mb-12">

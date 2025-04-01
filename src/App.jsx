@@ -9,16 +9,19 @@ function App() {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [userName, setUserName] = useState("");
+  const [skippedQuestions, setSkippedQuestions] = useState(0);
 
   const handleCategorySelect = (category, name) => {
     setSelectedCategory(category);
     setUserName(name);
     setShowResults(false);
     setScore(0);
+    setSkippedQuestions(0);
   };
 
-  const handleQuizComplete = (finalScore) => {
+  const handleQuizComplete = (finalScore, skipped) => {
     setScore(finalScore);
+    setSkippedQuestions(skipped);
     setShowResults(true);
   };
 
@@ -26,12 +29,14 @@ function App() {
     setSelectedCategory(null);
     setShowResults(false);
     setScore(0);
+    setSkippedQuestions(0);
   };
 
   const handleExitQuiz = () => {
     setSelectedCategory(null);
     setShowResults(false);
     setScore(0);
+    setSkippedQuestions(0);
   };
 
   if (showResults && selectedCategory) {
@@ -41,6 +46,7 @@ function App() {
         totalQuestions={selectedCategory.questions.length}
         onRestart={handleRestart}
         userName={userName}
+        skippedQuestions={skippedQuestions}
       />
     );
   }

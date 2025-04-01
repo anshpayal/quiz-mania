@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Timer, ArrowRight, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Timer } from "lucide-react";
+import Header from "./Header";
 
 const Quiz = ({ category, onComplete, onExit, userName }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -9,7 +10,8 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
   const [skippedQuestions, setSkippedQuestions] = useState([]);
 
   const currentQuestion = category.questions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / category.questions.length) * 100;
+  const progress =
+    ((currentQuestionIndex + 1) / category.questions.length) * 100;
   const isLastQuestion = currentQuestionIndex === category.questions.length - 1;
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
       setSelectedAnswer(null);
       setTimeLeft(10);
     } else {
-      onComplete(score);
+      onComplete(score, skippedQuestions.length);
     }
   };
 
@@ -50,18 +52,7 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <header className="border-b border-[#D9D9D9] px-4 md:px-12 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-[#B92B5D]">QuizMania</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600">Welcome, {userName}</span>
-          <button
-            onClick={onExit}
-            className="text-[#B92B5D] border border-[#B92B5D] px-4 py-2 rounded-lg cursor-pointer"
-          >
-            Exit Quiz
-          </button>
-        </div>
-      </header>
+      <Header userName={userName} onExit={onExit} />
 
       <main className="flex-1 p-8 max-w-4xl mx-auto w-full">
         <div className="mb-8">
@@ -106,15 +97,7 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
               onClick={handleNextQuestion}
               className="bg-[#B92B5D] text-white px-8 py-3 rounded-lg flex items-center gap-2 cursor-pointer transition-colors duration-200"
             >
-              {isLastQuestion ? (
-                <>
-                  Finish
-                </>
-              ) : (
-                <>
-                  Next
-                </>
-              )}
+              {isLastQuestion ? "Finish" : "Next"}
             </button>
             <button
               onClick={handleSkipQuestion}
