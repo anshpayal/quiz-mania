@@ -1,18 +1,35 @@
-import React from "react";
+// File: src/components/Result.jsx
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Trophy } from "lucide-react";
+import { useQuiz } from "../context/QuizContext";
 import Header from "./Header";
 
-const Result = ({
-  score,
-  totalQuestions,
-  onRestart,
-  userName,
-  skippedQuestions = 0,
-}) => {
+const Result = () => {
+  const { selectedCategory, userName, score, skippedQuestions, handleRestart } =
+    useQuiz();
+  const navigate = useNavigate();
+
+  // Redirect if no category was selected (user refreshed or accessed directly)
+  useEffect(() => {
+    if (!selectedCategory) {
+      navigate("/");
+    }
+  }, [selectedCategory, navigate]);
+
+  // Return null while potentially redirecting
+  if (!selectedCategory) return null;
+
+  const totalQuestions = selectedCategory.questions.length;
   const percentage = Math.round((score / totalQuestions) * 100);
   const isHighScore = percentage > 70;
   const incorrectAnswers = totalQuestions - score;
-  const actuallyWrong = incorrectAnswers - skippedQuestions;
+  const actuallyWrong = incorrectAnswers - skippedQuestions.length;
+
+  const handleRestartQuiz = () => {
+    handleRestart();
+    navigate("/");
+  };
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
@@ -71,7 +88,7 @@ const Result = ({
               </div>
               <div>
                 <div className="text-yellow-500 font-bold text-xl">
-                  {skippedQuestions}
+                  {skippedQuestions.length}
                 </div>
                 <div className="text-sm text-gray-600">Skipped</div>
               </div>
@@ -79,7 +96,7 @@ const Result = ({
           </div>
 
           <button
-            onClick={onRestart}
+            onClick={handleRestartQuiz}
             className="bg-[#B92B5D] cursor-pointer text-white px-8 py-3 rounded-lg inline-flex items-center gap-2 transition-colors duration-200"
           >
             Retake Quiz
