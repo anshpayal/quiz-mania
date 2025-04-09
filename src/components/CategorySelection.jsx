@@ -1,15 +1,21 @@
+// File: src/components/CategorySelection.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuiz } from "../context/QuizContext";
 import Header from "./Header";
 import RulesModal from "./RulesModal";
 
-const CategorySelection = ({ categories, onSelectCategory }) => {
+const CategorySelection = () => {
+  const { categories, handleCategorySelect } = useQuiz();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userName, setUserName] = useState("");
   const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleStartQuiz = () => {
     if (selectedCategory && userName.trim()) {
-      onSelectCategory(selectedCategory, userName);
+      handleCategorySelect(selectedCategory, userName);
+      navigate("/quiz");
     }
   };
 
@@ -31,13 +37,14 @@ const CategorySelection = ({ categories, onSelectCategory }) => {
             Welcome to <span className="text-[#B92B5D]">QuizMania</span>
           </h2>
           <p className="text-black mb-2 p-4 bg-[#D9D9D94D]">
-            Please read all the rules about this quiz before you start.<br/>
+            Please read all the rules about this quiz before you start.
+            <br />
             <button
-            onClick={openRulesModal}
-            className="text-[#B92B5D] font-semibold hover:underline"
-          >
-            Quiz Rules
-          </button>
+              onClick={openRulesModal}
+              className="text-[#B92B5D] font-semibold hover:underline"
+            >
+              Quiz Rules
+            </button>
           </p>
         </div>
 

@@ -1,19 +1,32 @@
+// File: src/components/Quiz.jsx
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Timer } from "lucide-react";
+import { useQuiz } from "../context/QuizContext";
 import Header from "./Header";
 
-const Quiz = ({ category, onComplete, onExit, userName }) => {
+const Quiz = () => {
+  const {
+    selectedCategory,
+    userName,
+    handleQuizComplete,
+    setSkippedQuestions,
+  } = useQuiz();
+  const navigate = useNavigate();
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [score, setScore] = useState(0);
-  const [skippedQuestions, setSkippedQuestions] = useState([]);
+  const [skippedArray, setSkippedArray] = useState([]);
 
-  const currentQuestion = category.questions[currentQuestionIndex];
-  const progress =
-    ((currentQuestionIndex + 1) / category.questions.length) * 100;
-  const isLastQuestion = currentQuestionIndex === category.questions.length - 1;
-
+  // Redirect if no category is selected
+  // useEffect(() => {
+  //   if (!selectedCategory) {
+  //     navigate("/");
+  //   }
+  // }, [selectedCategory, navigate]);
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
@@ -28,37 +41,55 @@ const Quiz = ({ category, onComplete, onExit, userName }) => {
     return () => clearInterval(timer);
   }, [currentQuestionIndex]);
 
+  // Return null while potentially redirecting
+  if (!selectedCategory) return null;
+
+  const currentQuestion = selectedCategory.questions[currentQuestionIndex];
+  const progress =
+    ((currentQuestionIndex + 1) / selectedCategory.questions.length) * 100;
+  const isLastQuestion =
+    currentQuestionIndex === selectedCategory.questions.length - 1;
+
   const handleNextQuestion = () => {
     if (selectedAnswer === currentQuestion.correctAnswer) {
       setScore((prev) => prev + 1);
     }
     if (!selectedAnswer) {
-      setSkippedQuestions((prev) => [...prev, currentQuestionIndex]);
+      setSkippedArray((prev) => [...prev, currentQuestionIndex]);
     }
 
-    if (currentQuestionIndex < category.questions.length - 1) {
+    if (currentQuestionIndex < selectedCategory.questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setTimeLeft(10);
     } else {
-      onComplete(score, skippedQuestions.length);
+      // Update context with final score and skipped questions
+      handleQuizComplete(
+        score + (selectedAnswer === currentQuestion.correctAnswer ? 1 : 0)
+      );
+      setSkippedQuestions(skippedArray);
+      navigate("/results");
     }
   };
 
   const handleSkipQuestion = () => {
-    setSkippedQuestions((prev) => [...prev, currentQuestionIndex]);
+    setSkippedArray((prev) => [...prev, currentQuestionIndex]);
     handleNextQuestion();
+  };
+
+  const handleExitQuiz = () => {
+    navigate("/");
   };
 
   return (
     <div className="min-h-screen bg-[#F3F3E9] flex flex-col">
-      <Header userName={userName} onExit={onExit} />
+      <Header userName={userName} onExit={handleExitQuiz} />
 
       <main className="flex-1 p-8 max-w-4xl mx-auto w-full">
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
             <span className="text-[#B92B5D] font-medium">
-              {currentQuestionIndex + 1}/{category.questions.length}
+              {currentQuestionIndex + 1}/{selectedCategory.questions.length}
             </span>
             <div className="flex items-center gap-2">
               <Timer className="w-5 h-5 text-[#B92B5D]" />
