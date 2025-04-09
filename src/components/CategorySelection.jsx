@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import Header from "./Header";
+import RulesModal from "./RulesModal";
 
 const CategorySelection = ({ categories, onSelectCategory }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [userName, setUserName] = useState("");
+  const [isRulesModalOpen, setIsRulesModalOpen] = useState(false);
 
   const handleStartQuiz = () => {
     if (selectedCategory && userName.trim()) {
       onSelectCategory(selectedCategory, userName);
     }
+  };
+
+  const openRulesModal = () => {
+    setIsRulesModalOpen(true);
+  };
+
+  const closeRulesModal = () => {
+    setIsRulesModalOpen(false);
   };
 
   return (
@@ -20,18 +30,15 @@ const CategorySelection = ({ categories, onSelectCategory }) => {
           <h2 className="text-4xl font-bold text-gray-800 mb-4">
             Welcome to <span className="text-[#B92B5D]">QuizMania</span>
           </h2>
-          <p className="text-black mb-8">
-            Please read all the rules about this quiz before you start.
+          <p className="text-black mb-2 p-4 bg-[#D9D9D94D]">
+            Please read all the rules about this quiz before you start.<br/>
+            <button
+            onClick={openRulesModal}
+            className="text-[#B92B5D] font-semibold hover:underline"
+          >
+            Quiz Rules
+          </button>
           </p>
-          <div className="bg-[#D9D9D94D] p-4 rounded-lg text-left mb-8">
-            <h3 className="text-[#B92B5D] font-semibold mb-2">Quiz rules</h3>
-            <ul className="space-y-2">
-              <li>• Each question has a 10-second time limit</li>
-              <li>• You cannot return to previous questions</li>
-              <li>• Each correct answer earns one point</li>
-              <li>• Final results will be shown at the end</li>
-            </ul>
-          </div>
         </div>
 
         <div className="space-y-6">
@@ -81,6 +88,8 @@ const CategorySelection = ({ categories, onSelectCategory }) => {
           </button>
         </div>
       </main>
+
+      <RulesModal isOpen={isRulesModalOpen} onClose={closeRulesModal} />
     </div>
   );
 };
